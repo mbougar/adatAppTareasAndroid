@@ -8,21 +8,22 @@ import androidx.navigation.compose.composable
 import com.mbougar.adatapptareasandroid.ui.view.LoginScreen
 import com.mbougar.adatapptareasandroid.ui.view.RegisterScreen
 import com.mbougar.adatapptareasandroid.ui.view.TaskListScreen
-import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModel
+import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModelLogin
+import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModelRegister
 import com.mbougar.adatapptareasandroid.ui.viewmodel.TareasViewModel
 
 @Composable
-fun AppNavigation(navController: NavHostController, authViewModel: AuthViewModel, tareasViewModel: TareasViewModel) {
-    val token = authViewModel.token.collectAsState().value
+fun AppNavigation(navController: NavHostController, authViewModelLogin: AuthViewModelLogin, authViewModelRegister: AuthViewModelRegister, tareasViewModel: TareasViewModel) {
+    val token = authViewModelLogin.token.collectAsState().value
 
-    NavHost(navController = navController, startDestination = if (token == null) "login" else "taskList") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("login") {
-            LoginScreen(viewModel = authViewModel, navController) {
+            LoginScreen(viewModel = authViewModelLogin, navController) {
                 navController.navigate("taskList") { popUpTo("login") { inclusive = true } }
             }
         }
         composable("register") {
-            RegisterScreen(viewModel = authViewModel, navController) {
+            RegisterScreen(viewModel = authViewModelRegister, navController) {
                 navController.navigate("login")
             }
         }

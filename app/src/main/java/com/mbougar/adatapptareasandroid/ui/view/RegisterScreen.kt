@@ -12,14 +12,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.mbougar.adatapptareasandroid.data.model.UsuarioRegisterDTO
-import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModel
+import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModelRegister
 
 @Composable
-fun RegisterScreen(viewModel: AuthViewModel = viewModel(), navController: NavController, onRegisterSuccess: () -> Unit) {
+fun RegisterScreen(viewModel: AuthViewModelRegister = viewModel(), navController: NavController, onRegisterSuccess: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordRepeat by remember { mutableStateOf("") }
+    var rol by remember { mutableStateOf("") }
     var calle by remember { mutableStateOf("") }
     var num by remember { mutableStateOf("") }
     var municipio by remember { mutableStateOf("") }
@@ -42,6 +43,7 @@ fun RegisterScreen(viewModel: AuthViewModel = viewModel(), navController: NavCon
             OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
             OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Contraseña") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), singleLine = true)
             OutlinedTextField(value = passwordRepeat, onValueChange = { passwordRepeat = it }, label = { Text("Repetir Contraseña") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = rol, onValueChange = { rol = it }, label = { Text("Rol") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
             OutlinedTextField(value = calle, onValueChange = { calle = it }, label = { Text("Calle") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
             OutlinedTextField(value = num, onValueChange = { num = it }, label = { Text("Número") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
             OutlinedTextField(value = municipio, onValueChange = { municipio = it }, label = { Text("Municipio") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
@@ -56,7 +58,7 @@ fun RegisterScreen(viewModel: AuthViewModel = viewModel(), navController: NavCon
             Button(
                 onClick = {
                     viewModel.register(
-                        UsuarioRegisterDTO(username, email, password, passwordRepeat, "USER", calle, num, municipio, provincia, cp, ciudad)
+                        UsuarioRegisterDTO(username, email, password, passwordRepeat, rol, calle, num, municipio, provincia, cp, ciudad)
                     )
                 },
                 modifier = Modifier.fillMaxWidth()

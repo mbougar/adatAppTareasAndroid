@@ -11,19 +11,20 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModel
+import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModelLogin
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel = viewModel(), navController: NavController, onLoginSuccess: () -> Unit) {
+fun LoginScreen(viewModel: AuthViewModelLogin = viewModel(), navController: NavController, onLoginSuccess: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val token by viewModel.token.collectAsState()
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
-
+    /*
     LaunchedEffect(token) {
         if (token != null) onLoginSuccess()
     }
+     */
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
@@ -68,6 +69,10 @@ fun LoginScreen(viewModel: AuthViewModel = viewModel(), navController: NavContro
                 onClick = { navController.navigate("register") },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
+
+            Spacer(Modifier.padding(10.dp))
+
+            Text("Sesión iniciada: $username, $password. \nToken: $token")
         }
     }
 }
