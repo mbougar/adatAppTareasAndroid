@@ -1,52 +1,46 @@
 package com.mbougar.adatapptareasandroid
 
-import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.mbougar.adatapptareasandroid.data.remote.ApiService
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.*
 import com.mbougar.adatapptareasandroid.data.remote.RetrofitInstance
-import com.mbougar.adatapptareasandroid.ui.view.LoginScreen
-import com.mbougar.adatapptareasandroid.ui.view.TaskListScreen
+import com.mbougar.adatapptareasandroid.navigation.AppNavigation
+import com.mbougar.adatapptareasandroid.ui.theme.AdatAppTareasAndroidTheme
+
+import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModel
 import com.mbougar.adatapptareasandroid.ui.viewmodel.TareasViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val api = RetrofitInstance(this).api
-        val viewModel: TareasViewModel by viewModels { object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return TareasViewModel(api) as T
-            }
-        } }
+
         setContent {
-            App(viewModel)
+            AdatAppTareasAndroidTheme {
+                MainApp()
+            }
         }
     }
 }
 
 @Composable
-fun App(viewModel: TareasViewModel) {
-    var isLoggedIn by remember { mutableStateOf(false) }
-    if (isLoggedIn) {
-        TaskListScreen(viewModel)
-    } else {
-        LoginScreen(viewModel) { isLoggedIn = true }
+fun MainApp() {
+    val navController = rememberNavController()
+    val authViewModel: AuthViewModel = AuthViewModel(api = RetrofitInstance.api)
+    val tareasViewModel: TareasViewModel = TareasViewModel(api = RetrofitInstance.api)
+
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Box(Modifier.padding(innerPadding)) {
+            AppNavigation(navController, authViewModel, tareasViewModel)
+        }
     }
 }
 
-class MyApp : Application() {
-    lateinit var api: ApiService
-    override fun onCreate() {
-        super.onCreate()
-        api = RetrofitInstance(this).api
-    }
-}

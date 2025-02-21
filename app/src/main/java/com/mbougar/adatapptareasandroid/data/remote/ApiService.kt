@@ -1,37 +1,33 @@
 package com.mbougar.adatapptareasandroid.data.remote
 
-import com.mbougar.adatapptareasandroid.data.model.LoginRequest
 import com.mbougar.adatapptareasandroid.data.model.LoginResponse
-import com.mbougar.adatapptareasandroid.data.model.RegisterRequest
+import com.mbougar.adatapptareasandroid.data.model.LoginUsuarioDTO
 import com.mbougar.adatapptareasandroid.data.model.Tarea
-import com.mbougar.adatapptareasandroid.data.model.TareaRequest
-import com.mbougar.adatapptareasandroid.data.model.Usuario
+import com.mbougar.adatapptareasandroid.data.model.UsuarioRegisterDTO
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
-    @POST("usuarios/login")
-    suspend fun login(@Body request: LoginRequest): LoginResponse
+    @POST("/usuarios/login")
+    suspend fun login(@Body request: LoginUsuarioDTO): LoginResponse
 
-    @POST("usuarios/register")
-    suspend fun register(@Body request: RegisterRequest): Usuario
+    @POST("/usuarios/register")
+    suspend fun register(@Body request: UsuarioRegisterDTO)
 
-    @GET("usuarios/{id}")
-    suspend fun getUsuario(@Path("id") id: String): Usuario
+    @GET("/tareas")
+    suspend fun getTareas(@Header("Authorization") token: String): List<Tarea>
 
-    @GET("tareas")
-    suspend fun getTareas(): List<Tarea>
+    @POST("/tareas")
+    suspend fun createTarea(@Header("Authorization") token: String, @Body tarea: Tarea)
 
-    @POST("tareas")
-    suspend fun crearTarea(@Body request: TareaRequest): Tarea
+    @PUT("/tareas/{id}")
+    suspend fun updateTarea(@Header("Authorization") token: String, @Path("id") id: String, @Body tarea: Tarea)
 
-    @PUT("tareas/{id}")
-    suspend fun actualizarTarea(@Path("id") id: String, @Body request: TareaRequest): Tarea
-
-    @DELETE("tareas/{id}")
-    suspend fun eliminarTarea(@Path("id") id: String)
+    @DELETE("/tareas/{id}")
+    suspend fun deleteTarea(@Header("Authorization") token: String, @Path("id") id: String)
 }

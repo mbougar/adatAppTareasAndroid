@@ -5,18 +5,14 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitInstance(context: Context) {
-    private val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-    private val token = prefs.getString("token", null)
+object RetrofitInstance {
+    private const val BASE_URL = "https://adatprojectoapitareashogar.onrender.com"
 
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(AuthInterceptor(token))
-        .build()
-
-    val api: ApiService = Retrofit.Builder()
-        .baseUrl("https://tuapi.com/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(client)
-        .build()
-        .create(ApiService::class.java)
+    val api: ApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+    }
 }
