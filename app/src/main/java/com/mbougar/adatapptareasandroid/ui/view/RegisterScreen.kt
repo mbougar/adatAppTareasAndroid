@@ -1,22 +1,21 @@
 package com.mbougar.adatapptareasandroid.ui.view
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.mbougar.adatapptareasandroid.data.model.UsuarioRegisterDTO
 import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModel
 
 @Composable
-fun RegisterScreen(viewModel: AuthViewModel = viewModel(), onRegisterSuccess: () -> Unit) {
+fun RegisterScreen(viewModel: AuthViewModel = viewModel(), navController: NavController, onRegisterSuccess: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -29,34 +28,48 @@ fun RegisterScreen(viewModel: AuthViewModel = viewModel(), onRegisterSuccess: ()
     var ciudad by remember { mutableStateOf("") }
 
     val loading by viewModel.loading.collectAsState()
-    val error by viewModel.error.collectAsState()
+    val registerError by viewModel.error.collectAsState()
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("Registro", style = MaterialTheme.typography.bodyLarge)
-        Spacer(modifier = Modifier.height(16.dp))
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Registro", style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(24.dp))
 
-        OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text("Usuario") })
-        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
-        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Contraseña") }, visualTransformation = PasswordVisualTransformation())
-        OutlinedTextField(value = passwordRepeat, onValueChange = { passwordRepeat = it }, label = { Text("Repetir Contraseña") }, visualTransformation = PasswordVisualTransformation())
-        OutlinedTextField(value = calle, onValueChange = { calle = it }, label = { Text("Calle") })
-        OutlinedTextField(value = num, onValueChange = { num = it }, label = { Text("Número") })
-        OutlinedTextField(value = municipio, onValueChange = { municipio = it }, label = { Text("Municipio") })
-        OutlinedTextField(value = provincia, onValueChange = { provincia = it }, label = { Text("Provincia") })
-        OutlinedTextField(value = cp, onValueChange = { cp = it }, label = { Text("Código Postal") })
-        OutlinedTextField(value = ciudad, onValueChange = { ciudad = it }, label = { Text("Ciudad") })
+            OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text("Usuario") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Contraseña") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = passwordRepeat, onValueChange = { passwordRepeat = it }, label = { Text("Repetir Contraseña") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = calle, onValueChange = { calle = it }, label = { Text("Calle") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = num, onValueChange = { num = it }, label = { Text("Número") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = municipio, onValueChange = { municipio = it }, label = { Text("Municipio") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = provincia, onValueChange = { provincia = it }, label = { Text("Provincia") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = cp, onValueChange = { cp = it }, label = { Text("Código Postal") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            OutlinedTextField(value = ciudad, onValueChange = { ciudad = it }, label = { Text("Ciudad") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            if (loading) CircularProgressIndicator()
+            registerError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
 
-        if (loading) CircularProgressIndicator()
-        error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+            Button(
+                onClick = {
+                    viewModel.register(
+                        UsuarioRegisterDTO(username, email, password, passwordRepeat, "USER", calle, num, municipio, provincia, cp, ciudad)
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Registrarse")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {
-            viewModel.register(
-                UsuarioRegisterDTO(username, email, password, passwordRepeat, "USER", calle, num, municipio, provincia, cp, ciudad)
+            ClickableText(
+                text = AnnotatedString("¿Ya tienes cuenta? Inicia sesión"),
+                onClick = { navController.navigate("login") },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
-        }) {
-            Text("Registrarse")
         }
     }
 }

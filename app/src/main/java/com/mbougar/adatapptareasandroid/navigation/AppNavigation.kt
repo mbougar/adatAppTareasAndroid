@@ -17,12 +17,12 @@ fun AppNavigation(navController: NavHostController, authViewModel: AuthViewModel
 
     NavHost(navController = navController, startDestination = if (token == null) "login" else "taskList") {
         composable("login") {
-            LoginScreen(viewModel = authViewModel) {
+            LoginScreen(viewModel = authViewModel, navController) {
                 navController.navigate("taskList") { popUpTo("login") { inclusive = true } }
             }
         }
         composable("register") {
-            RegisterScreen(viewModel = authViewModel) {
+            RegisterScreen(viewModel = authViewModel, navController) {
                 navController.navigate("login")
             }
         }
