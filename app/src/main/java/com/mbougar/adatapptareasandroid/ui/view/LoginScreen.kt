@@ -20,11 +20,11 @@ fun LoginScreen(viewModel: AuthViewModelLogin = viewModel(), navController: NavC
     val token by viewModel.token.collectAsState()
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
-    /*
+
     LaunchedEffect(token) {
         if (token != null) onLoginSuccess()
     }
-     */
+
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(

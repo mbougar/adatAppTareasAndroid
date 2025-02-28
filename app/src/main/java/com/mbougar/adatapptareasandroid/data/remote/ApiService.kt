@@ -3,6 +3,7 @@ package com.mbougar.adatapptareasandroid.data.remote
 import com.mbougar.adatapptareasandroid.data.model.LoginResponse
 import com.mbougar.adatapptareasandroid.data.model.LoginUsuarioDTO
 import com.mbougar.adatapptareasandroid.data.model.Tarea
+import com.mbougar.adatapptareasandroid.data.model.TareaInsertDTO
 import com.mbougar.adatapptareasandroid.data.model.UsuarioRegisterDTO
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -22,11 +23,17 @@ interface ApiService {
     @GET("/tareas")
     suspend fun getTareas(@Header("Authorization") token: String): List<Tarea>
 
+    @GET("/tareas/usuario/{usuario}")
+    suspend fun getTareasPorUsuario(@Header("Authorization") token: String, @Path("usuario") usuario: String): List<Tarea>
+
+    @GET("/tareas/{id}")
+    suspend fun getTareaById(@Header("Authorization") token: String, @Path("id") id: String): Tarea
+
     @POST("/tareas")
-    suspend fun createTarea(@Header("Authorization") token: String, @Body tarea: Tarea)
+    suspend fun createTarea(@Header("Authorization") token: String, @Body tarea: Tarea): Tarea
 
     @PUT("/tareas/{id}")
-    suspend fun updateTarea(@Header("Authorization") token: String, @Path("id") id: String, @Body tarea: Tarea)
+    suspend fun updateTarea(@Header("Authorization") token: String, @Path("id") id: String, @Body tareaInsertDTO: TareaInsertDTO): Tarea
 
     @DELETE("/tareas/{id}")
     suspend fun deleteTarea(@Header("Authorization") token: String, @Path("id") id: String)

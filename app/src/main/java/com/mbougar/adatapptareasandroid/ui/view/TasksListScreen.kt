@@ -35,13 +35,20 @@ fun TaskListScreen(viewModel: TareasViewModel = viewModel(), navController: NavC
             }
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues), contentAlignment = Alignment.Center) {
             if (tareas.isEmpty()) {
-                Text("No hay tareas disponibles", style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
+                Column {
+                    Text("No hay tareas disponibles", style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
+                    Text("${viewModel.tokener}")
+                }
             } else {
-                LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
-                    items(tareas) {
-                        TaskItem(it)
+                LazyColumn(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)) {
+                    items(tareas) { tarea ->
+                        TaskItem(tarea, viewModel)
                     }
                 }
             }
@@ -50,14 +57,35 @@ fun TaskListScreen(viewModel: TareasViewModel = viewModel(), navController: NavC
 }
 
 @Composable
-fun TaskItem(tarea: Tarea) {
+fun TaskItem(tarea: Tarea, viewModel: TareasViewModel) {
+    var isChecked by remember { mutableStateOf(tarea.estado != "PENDING") }
+
     Card(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = tarea.titulo, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = "${tarea.id}", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
             tarea.desc?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            Text(text = "Usuario: ${tarea.usuario}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = "Fecha Creación: ${tarea.fechCreacion}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = "Última Actualización: ${tarea.fechActualizacion}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "Estado: ${tarea.estado}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+                Spacer(modifier = Modifier.width(8.dp))
+                Checkbox(
+                    checked = isChecked,
+                    onCheckedChange = {
+                        isChecked = it
+                        val newEstado = if (it) "DONE" else "PENDING"
+                        viewModel.actualizarEstadoTarea(tarea.id!!, newEstado)
+                    }
+                )
+            }
         }
     }
 }
