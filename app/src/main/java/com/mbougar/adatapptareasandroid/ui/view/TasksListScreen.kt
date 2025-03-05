@@ -92,6 +92,7 @@ fun TaskItem(tarea: Tarea, viewModel: TareasViewModel) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = tarea.titulo, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = tarea.usuario, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             tarea.desc?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
 
             Row(

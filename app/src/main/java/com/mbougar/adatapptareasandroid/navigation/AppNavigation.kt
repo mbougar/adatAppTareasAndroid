@@ -14,7 +14,6 @@ import com.mbougar.adatapptareasandroid.ui.viewmodel.TareasViewModel
 
 @Composable
 fun AppNavigation(navController: NavHostController, authViewModelLogin: AuthViewModelLogin, authViewModelRegister: AuthViewModelRegister, tareasViewModel: TareasViewModel) {
-    val token = authViewModelLogin.token.collectAsState().value
 
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {

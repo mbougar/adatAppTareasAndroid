@@ -1,7 +1,9 @@
 package com.mbougar.adatapptareasandroid.ui.view
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,7 +17,11 @@ import com.mbougar.adatapptareasandroid.data.model.UsuarioRegisterDTO
 import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModelRegister
 
 @Composable
-fun RegisterScreen(viewModel: AuthViewModelRegister = viewModel(), navController: NavController, onRegisterSuccess: () -> Unit) {
+fun RegisterScreen(
+    viewModel: AuthViewModelRegister = viewModel(),
+    navController: NavController,
+    onRegisterSuccess: () -> Unit
+) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -30,10 +36,18 @@ fun RegisterScreen(viewModel: AuthViewModelRegister = viewModel(), navController
 
     val loading by viewModel.loading.collectAsState()
     val registerError by viewModel.error.collectAsState()
+    val scrollState = rememberScrollState()
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
         Column(
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Registro", style = MaterialTheme.typography.headlineMedium)

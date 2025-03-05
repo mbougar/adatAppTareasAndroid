@@ -65,6 +65,7 @@ class TareasViewModel(
             try {
                 token?.let {
                     api.deleteTarea("Bearer $it", id)
+                    cargarTareas()
                     _tareas.value = _tareas.value.filter { tarea -> tarea.id != id }
                 }
             } catch (e: Exception) {
