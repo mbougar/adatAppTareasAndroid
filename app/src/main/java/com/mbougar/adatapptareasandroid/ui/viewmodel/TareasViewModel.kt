@@ -9,6 +9,7 @@ import com.mbougar.adatapptareasandroid.data.repository.UserPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class TareasViewModel(
     private val api: ApiService,
@@ -41,9 +42,7 @@ class TareasViewModel(
                     _tareas.value = response
                 }
             } catch (e: Exception) {
-                // Handle error
-                tokener = "Error en la API: $e"
-                println(tokener)
+                println(e)
             }
         }
     }
@@ -56,8 +55,45 @@ class TareasViewModel(
                     cargarTareas()
                 }
             } catch (e: Exception) {
-                // Handle error
+                println(e)
             }
         }
     }
+
+    fun eliminarTarea(id: String) {
+        viewModelScope.launch {
+            try {
+                token?.let {
+                    api.deleteTarea("Bearer $it", id)
+                    _tareas.value = _tareas.value.filter { tarea -> tarea.id != id }
+                }
+            } catch (e: Exception) {
+                println(e)
+            }
+        }
+    }
+
+    fun crearTarea(titulo: String, descripcion: String, usuario: String) {
+        val fecha = Date()
+        viewModelScope.launch {
+            try {
+                token?.let {
+                    val nuevaTarea = Tarea(
+                        id = null,
+                        titulo = titulo,
+                        desc = descripcion,
+                        usuario = usuario,
+                        estado = "PENDING",
+                        fechCreacion = "$fecha",
+                        fechActualizacion = "$fecha"
+                    )
+                    api.createTarea("Bearer $it", nuevaTarea)
+                    cargarTareas()
+                }
+            } catch (e: Exception) {
+                println(e)
+            }
+        }
+    }
+
 }
