@@ -22,6 +22,7 @@ fun RegisterScreen(
     navController: NavController,
     onRegisterSuccess: () -> Unit
 ) {
+    // Variables de estado para almacenar los valores ingresados en el formulario
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -34,10 +35,12 @@ fun RegisterScreen(
     var cp by remember { mutableStateOf("") }
     var ciudad by remember { mutableStateOf("") }
 
+    // Estados para manejar la carga y los errores en el registro
     val loading by viewModel.loading.collectAsState()
     val registerError by viewModel.error.collectAsState()
     val scrollState = rememberScrollState()
 
+    // Estructura de la pantalla de registro
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -47,12 +50,14 @@ fun RegisterScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState), // Permite desplazarse si el contenido es extenso
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Título de la pantalla
             Text("Registro", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Campos del formulario de registro
             OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text("Usuario") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
             OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
             OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Contraseña") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), singleLine = true)
@@ -66,9 +71,14 @@ fun RegisterScreen(
             OutlinedTextField(value = ciudad, onValueChange = { ciudad = it }, label = { Text("Ciudad") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            // Indicador de carga mientras se procesa el registro
             if (loading) CircularProgressIndicator()
+
+            // Mostrar mensaje de error si existe
             registerError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
 
+            // Botón para enviar los datos de registro
             Button(
                 onClick = {
                     viewModel.register(
@@ -81,6 +91,7 @@ fun RegisterScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Texto clickeable para ir a la pantalla de inicio de sesión
             ClickableText(
                 text = AnnotatedString("¿Ya tienes cuenta? Inicia sesión"),
                 onClick = { navController.navigate("login") },

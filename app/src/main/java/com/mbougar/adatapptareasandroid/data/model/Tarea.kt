@@ -1,5 +1,6 @@
 package com.mbougar.adatapptareasandroid.data.model
 
+// Clase que define una tarea
 data class Tarea(
     val id: String?,
     val titulo: String,

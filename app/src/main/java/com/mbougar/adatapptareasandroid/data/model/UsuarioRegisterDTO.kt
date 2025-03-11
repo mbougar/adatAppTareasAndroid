@@ -1,5 +1,6 @@
 package com.mbougar.adatapptareasandroid.data.model
 
+// DTO de registro de usuario
 data class UsuarioRegisterDTO(
     val username: String,
     val email: String,

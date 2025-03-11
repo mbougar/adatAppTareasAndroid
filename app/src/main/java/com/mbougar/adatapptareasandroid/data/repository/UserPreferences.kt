@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore(name = "user_prefs")
 
+// Clase que gestiona el almacenamiento local en DataStore
 class UserPreferences(private val context: Context) {
     companion object {
         private val TOKEN_KEY = stringPreferencesKey("auth_token")

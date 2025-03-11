@@ -13,6 +13,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
+// Interfaz de retrofit con los endpoints de la api
 interface ApiService {
     @POST("/usuarios/login")
     suspend fun login(@Body request: LoginUsuarioDTO): LoginResponse

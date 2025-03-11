@@ -12,6 +12,7 @@ import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModelLogin
 import com.mbougar.adatapptareasandroid.ui.viewmodel.AuthViewModelRegister
 import com.mbougar.adatapptareasandroid.ui.viewmodel.TareasViewModel
 
+//Funcion composable que implementa la navegacion entre pantallas
 @Composable
 fun AppNavigation(navController: NavHostController, authViewModelLogin: AuthViewModelLogin, authViewModelRegister: AuthViewModelRegister, tareasViewModel: TareasViewModel) {
 

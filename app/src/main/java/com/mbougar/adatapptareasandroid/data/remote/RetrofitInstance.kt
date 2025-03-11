@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+// Instancia de retrofit para generar un ApiService
 object RetrofitInstance {
     private const val BASE_URL = "https://adatprojectoapitareashogar.onrender.com"
 
